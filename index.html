@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#FFF8F0" />
+  <title>Riya Jain | Node & React Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+
+  <style>
+    /* ================= Timeless Neutrals (accessibility-tuned) ================= */
+    :root{
+      --bg: #FFF8F0;            /* Cream — page background */
+      --card: #B08966;          /* Warm Taupe — deeper for contrast */
+      --accent: #C79A44;        /* Soft Gold — slightly richer */
+      --text: #22211f;          /* Deep Charcoal — darker for legibility */
+      --muted: #6E6259;         /* Muted taupe — darker but still soft */
+      --glass: rgba(34,33,31,0.03);
+      --glass-strong: rgba(34,33,31,0.06);
+      --font: 'Poppins', system-ui, -apple-system, sans-serif;
+      --max-container: 1300px;
+    }
+
+    /* Reset / base */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;}
+    html, body {max-width:100%;overflow-x:hidden;}
+    body{
+      font-family:var(--font);
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+    }
+
+    /* layout grid */
+    .container{
+      max-width:var(--max-container);
+      margin:40px auto;
+      padding:28px clamp(16px, 4vw, 28px);
+      display:grid;
+      grid-template-columns: 2fr 1fr;
+      gap:28px;
+      position:relative;
+      z-index:2;
+    }
+
+    /* Header */
+    .header{
+      grid-column:1/-1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:14px 0;
+      position:sticky;
+      top:0;
+      z-index:999;
+      background:rgba(34,33,31,0.06);
+      backdrop-filter:blur(6px);
+      border-bottom:1px solid rgba(34,33,31,0.04);
+      margin:0 0 28px 0;
+      padding-left:28px;
+      padding-right:28px;
+      width:100%;
+      left:0;right:0;
+    }
+
+    .header.scrolled{
+      background:rgba(34,33,31,0.10);
+      box-shadow:0 6px 28px rgba(34,33,31,0.06);
+    }
+
+    /* Navigation */
+    .nav-toggle{display:none;background:transparent;border:0;color:var(--text);font-size:1.5rem;padding:8px;border-radius:8px;cursor:pointer}
+    .nav-toggle:hover{background:var(--glass)}
+
+    .nav-centered{
+      display:flex;gap:20px;align-items:center;justify-content:center;max-width:100%;
+    }
+    .nav-centered, .nav-centered *{box-sizing:border-box}
+
+    .nav-centered a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:500;transition:all 0.22s ease}
+    .nav-centered a:hover{color:var(--text);background:var(--glass-strong)}
+
+    .small-btn{padding:8px 12px;border-radius:8px;background:var(--accent);color:var(--text);font-weight:700;border:0;text-decoration:none;display:inline-block;transition:transform .18s ease}
+    .small-btn:hover{transform:translateY(-3px);opacity:0.95}
+
+    /* Mobile Navigation */
+    @media (max-width:992px){
+      .header{justify-content:space-between;padding:12px 20px;margin:0 0 28px 0}
+      .nav-toggle{display:block;order:1}
+      .nav-centered{display:none;position:fixed;top:70px;left:12px;right:12px;flex-direction:column;background:rgba(255,248,240,0.98);backdrop-filter:blur(8px);padding:18px;border-radius:12px;border:1px solid rgba(34,33,31,0.04);gap:8px;max-width:calc(100% - 24px)}
+      .nav-centered.mobile-open{display:flex}
+      .nav-centered a{width:100%;text-align:center;padding:12px}
+    }
+    @media (max-width:576px){
+      .header{padding:10px 16px;margin:0 0 18px 0}
+      .nav-centered{left:10px;right:10px;top:65px;padding:14px}
+    }
+
+    /* Images / media safety */
+    img, picture, video, iframe, embed, object {max-width:100%;height:auto;display:block}
+
+    /* avatar (circular DP) */
+    .avatar{width:220px;height:220px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3.2rem;font-weight:800;border:2px solid rgba(34,33,31,0.06);background:transparent;margin:auto;position:relative;overflow:hidden;transition:transform .35s ease, box-shadow .35s ease}
+    .avatar img{width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%;display:block}
+    .avatar-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:3.2rem;color:var(--text);background:var(--card)}
+
+    /* hero */
+    .hero{display:grid;grid-template-columns:1fr 1.4fr;gap:28px;align-items:center;background:linear-gradient(180deg, rgba(199,154,68,0.02), transparent);padding:2.4rem;border-radius:14px;border:1px solid rgba(34,33,31,0.03)}
+    .hero h1{font-size:2.4rem;line-height:1.05;margin-bottom:12px;color:var(--text)}
+    .hero h1 span{display:block;color:var(--muted);font-weight:500;font-size:1.05rem}
+    .hero p{color:var(--muted);margin-bottom:18px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:10px 18px;border-radius:10px;font-weight:600;border:1px solid rgba(34,33,31,0.06);background:transparent;color:var(--text);cursor:pointer;text-decoration:none;display:inline-block}
+    .btn-primary{background:var(--accent);color:var(--text)}
+
+    /* projects */
+    .section{margin-top:28px}
+    .section h2{font-size:1.6rem;margin-bottom:10px;color:var(--text)}
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+    .project{
+      background:rgba(176,137,102,0.10);
+      padding:16px;border-radius:12px;border:1px solid rgba(34,33,31,0.02)
+    }
+    .project h3{font-size:1rem;margin-bottom:8px;color:var(--text)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:0.8rem;padding:6px 8px;border-radius:999px;border:1px solid rgba(34,33,31,0.04);color:var(--text);background:var(--bg)}
+
+    /* sidebar - default to static for mobile/low-power devices to avoid expensive sticky behavior */
+    .sidebar{position:static;top:auto;height:auto;overflow:visible;padding-right:6px}
+    /* enable sticky sidebar only for large desktop widths where hardware is likely capable */
+    @media (min-width:1200px){
+      .sidebar{position:sticky;top:28px;height:calc(100vh - 56px);overflow:auto;padding-right:6px}
+    }
+
+    .card{
+      background:var(--card);
+      color:var(--bg);
+      padding:18px;border-radius:12px;margin-bottom:16px;box-shadow:0 6px 20px rgba(34,33,31,0.04)
+    }
+    .card h3{margin-bottom:12px;color:var(--bg)}
+    .timeline{display:flex;flex-direction:column;gap:12px}
+    .exp-item{background:rgba(255,248,240,0.6);padding:12px;border-radius:8px}
+    .exp-item h4{font-size:0.98rem;margin-bottom:6px;color:var(--text)}
+    .exp-item p{font-size:0.9rem;color:#2b2b2b}
+    .meta{font-size:0.82rem;color:var(--muted);margin-top:6px}
+
+    /* skills */
+    .skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .skill{padding:8px 10px;border-radius:8px;border:1px solid rgba(34,33,31,0.06);font-weight:600;font-size:0.85rem;background:var(--bg);color:var(--text)}
+
+    /* achievements */
+    .ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:8px}
+    .ach-item{background:var(--bg);padding:12px;border-radius:10px;min-height:70px;display:flex;flex-direction:column;gap:6px;justify-content:center;border:1px solid rgba(34,33,31,0.03)}
+    .ach-item strong{font-size:1rem;color:var(--text)}
+    .ach-item p{font-size:0.9rem;color:#444;margin:0}
+
+    /* contact form in sidebar */
+    form input, form textarea{width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid rgba(34,33,31,0.06);font-size:0.95rem;background:var(--bg);color:var(--text)}
+    form button{background:var(--text);color:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--text);width:100%;cursor:pointer}
+
+    /* footer social */
+    .socials{display:flex;gap:10px;justify-content:center;margin-top:10px}
+    .socials a{color:var(--text);background:var(--bg);padding:8px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(34,33,31,0.04)}
+
+    /* responsive tweaks */
+    @media (max-width:1200px){.container{grid-template-columns:1.5fr 1fr}}
+    @media (max-width:992px){
+      .container{grid-template-columns:1fr;padding:18px;margin-top:0}
+      .sidebar{position:static;height:auto;order:2}
+      .hero{grid-template-columns:1fr;text-align:center}
+      .avatar{margin:0 auto;width:180px;height:180px}
+      .hero h1{font-size:1.8rem}
+      .hero p{font-size:0.95rem}
+      .projects{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+      .ach-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    }
+    @media (max-width:576px){
+      .container{padding:12px}
+      .hero{padding:16px}
+      .avatar{width:140px;height:140px}
+      .hero h1{font-size:1.5rem}
+      .hero p{font-size:0.9rem}
+      .projects{grid-template-columns:1fr}
+      .ach-grid{grid-template-columns:1fr}
+      .header{padding:10px}
+    }
+
+    /* micro animations */
+    .project, .card, .avatar{transition:transform .35s ease, box-shadow .35s ease}
+    .project:hover, .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(34,33,31,0.06)}
+
+    /* Reveal animations */
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity 480ms cubic-bezier(.2,.9,.2,1),transform 480ms cubic-bezier(.2,.9,.2,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    @media (prefers-reduced-motion: reduce){.reveal{transition:none;transform:none;opacity:1}}
+
+    /* helper for long words */
+    .container, .projects, .ach-grid, .project, .card {overflow-wrap:anywhere}
+
+    /* ============== Performance guard for touch devices (works even if user requests desktop site) ============== */
+    @media (hover: none) and (pointer: coarse) {
+      /* remove expensive backdrop-filter */
+      .header { backdrop-filter: none !important; background: rgba(34,33,31,0.08) !important; }
+      /* reduce shadows & transitions */
+      .project, .card, .avatar, .btn, .small-btn { box-shadow: none !important; transition: none !important; }
+      /* simpler project/card background */
+      .project { background: rgba(176,137,102,0.06) !important; }
+      /* avoid sticky full-height sidebar on touch */
+      .sidebar { position: static !important; height: auto !important; overflow: visible !important; }
+      /* remove heavy hero gradient */
+      .hero { background: transparent !important; border: 1px solid rgba(34,33,31,0.02) !important; }
+      /* reduce avatar image size slightly on touch-desktop forcing */
+      .avatar { width:160px !important; height:160px !important; }
+      /* disable reveal animations on touch to avoid layout thrash */
+      .reveal { transition: none !important; transform: none !important; opacity:1 !important; }
+    }
+
+    /* Touch action hints for snappier tap handling */
+    button, a, input, textarea { touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mainNav">
+        <i class='bx bx-menu'></i>
+      </button>
+      <nav class="nav-centered" id="mainNav">
+        <a href="#work">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+        <a href="Riya_Jain_Resume.docx" download class="small-btn">Download Resume</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="avatar" title="Riya Jain">
+          <!-- Responsive srcset (replace the files with actual variants if you have them) -->
+          <img
+            src="o.jpg"
+            srcset="one-480.webp 480w, one-800.webp 800w, one-1200.webp 1200w"
+            sizes="(max-width: 576px) 140px, (max-width: 992px) 180px, 220px"
+            alt="Riya Jain"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          />
+        </div>
+        <div>
+          <h1>Hi, I'm <strong>Riya Jain</strong>
+            <span>A developer focused on Node.js, React.js & modern web architectures</span>
+          </h1>
+          <p>I build fast, maintainable web apps — server-side APIs with Node/Express, modern React frontends (Next/React), and developer-friendly tooling. I care about performance, DX and clean design.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">Hire me</a>
+            <a class="btn" href="#work">See projects</a>
+          </div>
+
+          <div class="section" style="margin-top:18px">
+            <h2 style="font-size:1.05rem;color:var(--text)">Quick facts</h2>
+            <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
+              <div style="background:var(--bg);color:var(--text);padding:8px 12px;border-radius:999px;font-weight:700">Node.js</div>
+              <div style="background:var(--bg);color:var(--text);padding:8px 12px;border-radius:999px;font-weight:700">React.js</div>
+              <div style="background:var(--bg);color:var(--text);padding:8px 12px;border-radius:999px;font-weight:700">Next.js</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="work" class="section">
+        <h2>Selected Projects</h2>
+        <p style="color:var(--muted);margin-bottom:12px">A curated list of work — architecture, code and impact.</p>
+
+        <div class="projects">
+          <article class="project">
+            <h3>HelixCare — Real-time Microservices (Node)</h3>
+            <div class="tags"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">Kafka</span><span class="tag">Postgres</span></div>
+            <p style="color:var(--muted);margin-top:10px">Designed and implemented modular Node-based services with Kafka for async messaging, containerized deployments, and PostgreSQL as the source of truth. Focused on observability and resilience.</p>
+            <div style="margin-top:12px"><a class="btn" href="https://github.com/riya-jain/HelixCare" target="_blank" rel="noopener">View repo</a></div>
+          </article>
+
+          <article class="project">
+            <h3>RequestFlow — Approval System (Node + Next)</h3>
+            <div class="tags"><span class="tag">Node.js</span><span class="tag">Next.js</span><span class="tag">JWT</span></div>
+            <p style="color:var(--muted);margin-top:10px">Built a robust request flow with role-based access, caching, and secure JWT-based auth. Designed a modular API and SSR-capable frontend with Next.js.</p>
+          </article>
+
+          <article class="project">
+            <h3>GreenPath — Agriculture Platform</h3>
+            <div class="tags"><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Express</span></div>
+            <p style="color:var(--muted);margin-top:10px">Platform to help farmers with crop selling, insurance and AI-driven assistance. Built backend services in Node and an interactive React/Next frontend.</p>
+          </article>
+
+          <article class="project">
+            <h3>More coming soon</h3>
+            <p style="color:var(--muted);margin-top:10px">I'm constantly iterating — follow my GitHub for updates.</p>
+          </article>
+        </div>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+
+      <div class="card">
+        <h3 id="experience">Experience</h3>
+        <div class="timeline">
+
+          <div class="exp-item">
+            <h4>Accenture — Development & Advanced Engineering (Simulation)</h4>
+            <p>Worked on web engineering workflows, refactoring modules and improving code maintainability using modern JS patterns and testing strategies.</p>
+            <div class="meta">Duration: Internship simulation • Key: JavaScript, Node.js</div>
+          </div>
+
+          <div class="exp-item">
+            <h4>HelixCare — Backend Engineer (Project)</h4>
+            <p>Led backend service development in Node.js: microservices, Kafka integration, containerization and CI-friendly architecture.</p>
+            <div class="meta">Duration: Project • Key: Node.js, Kafka, PostgreSQL</div>
+          </div>
+
+          <div class="exp-item">
+            <h4>RequestFlow — Full Stack Engineer</h4>
+            <p>Designed request/approval flows, JWT security, caching and data models for scalable traffic using Node and Next.js.</p>
+            <div class="meta">Duration: Ongoing • Key: Node.js, Next.js, Redis</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Skills & Tools</h3>
+        <div class="skills">
+          <div class="skill">Node.js</div>
+          <div class="skill">Express</div>
+          <div class="skill">React.js</div>
+          <div class="skill">Next.js</div>
+          <div class="skill">Docker</div>
+          <div class="skill">Kafka</div>
+          <div class="skill">Postgres</div>
+          <div class="skill">MongoDB</div>
+          <div class="skill">GIT</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Achievements</h3>
+        <div class="ach-grid">
+          <div class="ach-item">
+            <strong>750+ DSA Problems</strong>
+            <p>Solved 750+ algorithm & data structure problems across LeetCode, CodeChef & Codeforces.</p>
+          </div>
+          <div class="ach-item">
+            <strong>Platform Badge — Node Microservices</strong>
+            <p>Earned a recognized badge for designing scalable microservices using Node.js and distributed patterns.</p>
+          </div>
+          <div class="ach-item">
+            <strong>Production Prototypes</strong>
+            <p>Built production-ready prototypes deployed in Docker and tested with CI pipelines.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="contact">
+        <h3>Contact</h3>
+        <form id="contactForm">
+          <input name="name" placeholder="Your name" required>
+          <input name="email" type="email" placeholder="Your email" required>
+          <textarea name="message" rows="4" placeholder="Message" required></textarea>
+          <button type="submit">Send message</button>
+        </form>
+        <div style="margin-top:12px;text-align:center;color:var(--muted);font-size:0.9rem">
+          <div>let's talk</div>
+          <a href="mailto:riya.jain@example.com" style="color:var(--text);font-weight:700;text-decoration:none">riya.jain@example.com</a>
+        </div>
+        <div class="socials">
+          <a href="https://github.com/riya-jain" target="_blank" title="GitHub" rel="noopener"><i class='bx bxl-github'></i></a>
+          <a href="https://www.linkedin.com/in/riya-jain" target="_blank" title="LinkedIn" rel="noopener"><i class='bx bxl-linkedin-square'></i></a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <script>
+    // -------------------------
+    // Mobile Navigation Toggle + accessibility + ESC to close
+    // -------------------------
+    document.addEventListener('DOMContentLoaded', function() {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMenu = document.querySelector('.nav-centered');
+
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = navMenu.classList.contains('mobile-open');
+          if (isOpen) {
+            navMenu.classList.remove('mobile-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+          } else {
+            navMenu.classList.add('mobile-open');
+            navToggle.setAttribute('aria-expanded', 'true');
+            const firstLink = navMenu.querySelector('a'); if (firstLink) firstLink.focus();
+          }
+        });
+
+        const navLinks = navMenu.querySelectorAll('a');
+        navLinks.forEach(link => { link.addEventListener('click', () => { navMenu.classList.remove('mobile-open'); navToggle.setAttribute('aria-expanded', 'false'); }); });
+
+        document.addEventListener('click', function(e) {
+          if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('mobile-open'); navToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { navMenu.classList.remove('mobile-open'); navToggle.setAttribute('aria-expanded', 'false'); navToggle.focus(); } });
+      }
+
+      // Smooth scroll for internal anchors
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href'); if (!href || href === '#') return; const target = document.querySelector(href); if (!target) return; e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      // -------------------------
+      // Header scroll effect
+      // Use rAF-throttled listener and passive option for smoother scrolling (improves mobile)
+      // -------------------------
+      const header = document.querySelector('.header');
+      const checkHeader = () => {
+        if (!header) return;
+        if (window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled');
+      };
+
+      // rAF-throttled scroll handler (better than raw scroll)
+      let scrollTicking = false;
+      window.addEventListener('scroll', function() {
+        if (!scrollTicking) {
+          window.requestAnimationFrame(function() {
+            checkHeader();
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
+      }, { passive: true });
+
+      // Initial check
+      checkHeader();
+
+      // -------------------------
+      // Contact form (mailto)
+      // -------------------------
+      const form = document.getElementById('contactForm');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const name = this.name.value.trim() || 'No name';
+          const email = this.email.value.trim() || 'No email';
+          const message = this.message.value.trim() || '';
+          const subject = encodeURIComponent('Portfolio contact from ' + name);
+          const bodyLines = [];
+          bodyLines.push('Name: ' + name);
+          bodyLines.push('Email: ' + email);
+          bodyLines.push('---');
+          bodyLines.push(message);
+          const body = encodeURIComponent(bodyLines.join('\n'));
+          const mailto = 'mailto:riya.jain@example.com?subject=' + subject + '&body=' + body;
+          window.location.href = mailto;
+        });
+      }
+
+      // -------------------------
+      // Reveal animations
+      // Use IntersectionObserver on non-touch devices; reveal immediately on touch devices to avoid IO overhead.
+      // -------------------------
+      const isTouchDevice = (matchMedia('(hover: none) and (pointer: coarse)').matches);
+      const observerOptions = { threshold: 0.08, rootMargin: '0px 0px -120px 0px' };
+
+      if (!isTouchDevice && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function(entries, obs) {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+        document.querySelectorAll('.project, .ach-item, .hero, .avatar').forEach(item => {
+          item.classList.add('reveal');
+          observer.observe(item);
+        });
+      } else {
+        // On touch devices (or older browsers), just reveal immediately to avoid work that causes jank
+        document.querySelectorAll('.project, .ach-item, .hero, .avatar').forEach(item => {
+          item.classList.add('visible');
+        });
+      }
+
+      // -------------------------
+      // Avatar fallback if image fails (keeps initials)
+      // The onerror sets the image display to none; this code will add placeholder initials if image not present or broken.
+      // -------------------------
+      document.querySelectorAll('.avatar').forEach(node => {
+        const img = node.querySelector('img');
+        // Create placeholder if no image or broken (naturalWidth===0)
+        if (!img || (img.complete && img.naturalWidth === 0) || (img.style && img.style.display === 'none')) {
+          if (!node.querySelector('.avatar-placeholder')) {
+            const initials = document.createElement('div');
+            initials.className = 'avatar-placeholder';
+            initials.textContent = 'RJ'; // change initials if needed
+            node.appendChild(initials);
+          }
+        } else {
+          if (img) img.style.objectPosition = 'center center';
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
